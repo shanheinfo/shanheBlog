@@ -1,0 +1,80 @@
+/* 全局样式 */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-container {
+    max-width: var(--max-width);
+    width: 100%;
+    box-shadow: var(--shadow);
+    margin: 0 auto;
+}
+
+.header {
+    background-color: var(--primary-color);
+    width: 100%;
+    height: var(--header-height);
+    box-shadow: var(--shadow);
+}
+
+.header-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.content-container {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--sidebar-width);
+    gap: 2rem;
+    padding: 2rem;
+    min-height: calc(100vh - var(--header-height));
+}
+
+.sidebar-left, .sidebar-right, .main-content {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    height: fit-content;
+}
+
+/* 响应式布局 */
+@media (max-width: 1024px) {
+    .content-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar-left, .sidebar-right {
+        position: fixed;
+        top: var(--header-height);
+        height: calc(100vh - var(--header-height));
+        width: var(--sidebar-width);
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar-right {
+        right: 0;
+        transform: translateX(100%);
+    }
+    
+    .sidebar-left.active, .sidebar-right.active {
+        transform: translateX(0);
+    }
+}

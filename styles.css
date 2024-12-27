@@ -1,0 +1,101 @@
+/* Dark mode variables */
+:root {
+    --primary-color: #8a2be2;
+    --primary-light: #9d4edd;
+    --text-color: #333;
+    --bg-color: #fff;
+    --card-bg: #fff;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --max-width: 1200px;
+    --sidebar-width: 280px;
+    --header-height: 60px;
+}
+
+[data-theme="dark"] {
+    --primary-color: #9d4edd;
+    --primary-light: #8a2be2;
+    --text-color: #fff;
+    --bg-color: #1a1a1a;
+    --card-bg: #2d2d2d;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Rest of the existing styles */
+.container {
+    max-width: var(--max-width);
+    margin: var(--header-height) auto 0;
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--sidebar-width);
+    gap: 2rem;
+    padding: 2rem;
+    min-height: calc(100vh - var(--header-height) - 4rem);
+}
+
+.sidebar-left, .sidebar-right, .main-content {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+/* Navigation animations */
+.main-nav a {
+    position: relative;
+    overflow: hidden;
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-light);
+    transition: width 0.3s ease;
+}
+
+.main-nav a:hover::after {
+    width: 100%;
+}
+
+.submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.submenu.active {
+    max-height: 500px;
+}
+
+/* Dark mode toggle animation */
+.theme-toggle {
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: rotate(180deg);
+}
+
+/* Mobile navigation enhancements */
+@media (max-width: 1024px) {
+    .sidebar-left, .sidebar-right {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar-right {
+        transform: translateX(100%);
+    }
+    
+    .sidebar-left.active {
+        transform: translateX(0);
+    }
+    
+    .sidebar-right.active {
+        transform: translateX(0);
+    }
+}

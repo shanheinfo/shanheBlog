@@ -1,0 +1,58 @@
+/* 淡入淡出 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* 滑动 */
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.slide-enter-from {
+  transform: translateX(-100%);
+}
+
+.slide-leave-to {
+  transform: translateX(100%);
+}
+
+/* 缩放 */
+.scale-enter-active,
+.scale-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.scale-enter-from,
+.scale-leave-to {
+  transform: scale(0.9);
+  opacity: 0;
+}
+
+/* 抽屉效果 */
+.drawer-enter-active,
+.drawer-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.drawer-enter-from,
+.drawer-leave-to {
+  transform: translateX(-100%);
+}
+
+/* 右侧抽屉 */
+.drawer-right-enter-active,
+.drawer-right-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.drawer-right-enter-from,
+.drawer-right-leave-to {
+  transform: translateX(100%);
+} 
