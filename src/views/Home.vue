@@ -3,7 +3,7 @@
     <article v-for="post in displayedPosts" :key="post.id" class="post">
       <h2>{{ post.title }}</h2>
       <p>{{ post.excerpt }}</p>
-      <router-link :to="`/article/${post.id}`" class="read-more">
+      <router-link :to="`/article/${post.slug}.html`" class="read-more">
         阅读更多 <i class="fas fa-arrow-right"></i>
       </router-link>
     </article>

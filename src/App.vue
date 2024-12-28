@@ -30,6 +30,8 @@
       @toggle-left="toggleLeftSidebar"
       @toggle-right="toggleRightSidebar"
     />
+
+    <BackToTop />
   </div>
 </template>
 
@@ -40,6 +42,7 @@ import SearchOverlay from './components/SearchOverlay.vue'
 import LeftSidebar from './components/LeftSidebar.vue'
 import RightSidebar from './components/RightSidebar.vue'
 import MobileNav from './components/MobileNav.vue'
+import BackToTop from './components/BackToTop.vue'
 import { useTheme } from './composables/theme'
 
 // 使用主题组合函数

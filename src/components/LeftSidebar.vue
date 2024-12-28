@@ -18,8 +18,8 @@
         <li v-for="item in menuItems" :key="item.path">
           <!-- 带子菜单的导航项 -->
           <template v-if="item.children">
-            <div 
-              class="nav-item has-submenu" 
+            <div
+              class="nav-item has-submenu"
               :class="{ active: item.isOpen }"
               @click="toggleSubmenu(item)"
             >
@@ -27,15 +27,15 @@
                 <i :class="item.icon"></i>
                 <span>{{ item.title }}</span>
               </div>
-              <i class="fas fa-chevron-right submenu-arrow" 
+              <i class="fas fa-chevron-right submenu-arrow"
                  :class="{ 'rotate': item.isOpen }">
               </i>
             </div>
             <transition name="slide">
               <ul class="submenu" v-show="item.isOpen">
                 <li v-for="child in item.children" :key="child.path">
-                  <router-link 
-                    :to="child.path" 
+                  <router-link
+                    :to="child.path"
                     class="nav-item"
                     active-class="active"
                   >
@@ -46,11 +46,11 @@
               </ul>
             </transition>
           </template>
-          
+
           <!-- 普通导航项 -->
-          <router-link 
-            v-else 
-            :to="item.path" 
+          <router-link
+            v-else
+            :to="item.path"
             class="nav-item"
             active-class="active"
           >
@@ -60,7 +60,7 @@
         </li>
       </ul>
     </nav>
-    
+
     <!-- Footer -->
     <Footer class="sidebar-footer" />
   </aside>
@@ -81,30 +81,30 @@ const menuItems = ref([
     icon: 'fas fa-folder',
     isOpen: false,
     children: [
-      { title: '技术博客', path: '/category/tech', icon: 'fas fa-code' },
-      { title: '生活随笔', path: '/category/life', icon: 'fas fa-pen' },
-      { title: '学习笔记', path: '/category/study', icon: 'fas fa-book' },
-      { title: '项目分享', path: '/category/project', icon: 'fas fa-project-diagram' }
+      { title: '技术博客', path: '/category/tech.html', icon: 'fas fa-code' },
+      { title: '生活随笔', path: '/category/life.html', icon: 'fas fa-pen' },
+      { title: '学习笔记', path: '/category/study.html', icon: 'fas fa-book' },
+      { title: '项目分享', path: '/category/project.html', icon: 'fas fa-project-diagram' }
     ]
   },
   {
     title: '标签云',
-    path: '/tags',
+    path: '/tags.html',
     icon: 'fas fa-tags'
   },
   {
     title: '时间线',
-    path: '/timeline',
+    path: '/timeline.html',
     icon: 'fas fa-clock'
   },
   {
     title: '关于我',
-    path: '/about',
+    path: '/about.html',
     icon: 'fas fa-user'
   },
   {
     title: '关于网站',
-    path: '/about-site',
+    path: '/about-site.html',
     icon: 'fa fa-server'
   }
 ])

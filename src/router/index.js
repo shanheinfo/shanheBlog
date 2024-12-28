@@ -5,7 +5,8 @@ import 'nprogress/nprogress.css'
 // 路由配置
 const routes = [
   {
-    path: '/',
+    path: '/index.html',
+    alias: '/',
     name: 'Home',
     component: () => import('../views/Home.vue'),
     meta: {
@@ -15,7 +16,7 @@ const routes = [
     }
   },
   {
-    path: '/article/:id',
+    path: '/article/:slug.html',
     name: 'Article',
     component: () => import('../views/Article.vue'),
     meta: {
@@ -23,7 +24,7 @@ const routes = [
     }
   },
   {
-    path: '/timeline',
+    path: '/timeline.html',
     name: 'Timeline',
     component: () => import('../views/Timeline.vue'),
     meta: {
@@ -33,7 +34,7 @@ const routes = [
     }
   },
   {
-    path: '/tags',
+    path: '/tags.html',
     name: 'Tags',
     component: () => import('../views/Tags.vue'),
     meta: {
@@ -43,7 +44,7 @@ const routes = [
     }
   },
   {
-    path: '/tag/:name',
+    path: '/tag/:name.html',
     name: 'TagDetail',
     component: () => import('../views/TagDetail.vue'),
     meta: {
@@ -52,7 +53,7 @@ const routes = [
     }
   },
   {
-    path: '/about',
+    path: '/about.html',
     name: 'About',
     component: () => import('../views/About.vue'),
     meta: {
@@ -62,7 +63,7 @@ const routes = [
     }
   },
   {
-    path: '/category/:name',
+    path: '/category/:name.html',
     name: 'CategoryDetail',
     component: () => import('../views/CategoryDetail.vue'),
     meta: {
@@ -71,7 +72,7 @@ const routes = [
     }
   },
   {
-    path: '/about-site',
+    path: '/about-site.html',
     name: 'AboutSite',
     component: () => import('../views/AboutSite.vue'),
     meta: {
@@ -138,7 +139,7 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
-// ���由后置守卫
+// 路由后置守卫
 router.afterEach(() => {
   // 关闭进度条
   NProgress.done()
