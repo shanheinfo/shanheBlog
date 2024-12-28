@@ -60,11 +60,15 @@
         </li>
       </ul>
     </nav>
+    
+    <!-- Footer -->
+    <Footer class="sidebar-footer" />
   </aside>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import Footer from './Footer.vue'
 
 const menuItems = ref([
   {
@@ -107,6 +111,28 @@ const toggleSubmenu = (item) => {
 </script>
 
 <style scoped>
+.sidebar-left {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: var(--spacing-md);
+}
+
+@media (max-width: 1024px) {
+  .sidebar-footer {
+    display: none; /* 在移动端隐藏侧边栏中的 footer */
+  }
+}
+
 .sidebar-left {
   background: var(--card-bg);
   border-radius: var(--border-radius);

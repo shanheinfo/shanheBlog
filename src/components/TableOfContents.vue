@@ -1,35 +1,53 @@
 <template>
-  <nav class="table-of-contents" v-show="headings.length > 0">
-    <div class="toc-header">
+  <div 
+    class="toc-container" 
+    v-show="headings.length > 0"
+    :class="{ expanded: isExpanded }"
+    :style="position"
+    @mousedown="startDrag"
+  >
+    <!-- 折叠状态显示的按钮 -->
+    <button 
+      v-if="!isExpanded" 
+      class="toc-button"
+      @click="toggleExpand"
+    >
       <i class="fas fa-list-ul"></i>
-      文章目录
-    </div>
+    </button>
 
-    <div class="toc-content" ref="tocContent">
-      <div
-        v-for="heading in headings"
-        :key="heading.id"
-        class="toc-item"
-        :class="{
-          active: activeId === heading.id,
-          [`level-${heading.level}`]: true
-        }"
-        :style="{ paddingLeft: `${(heading.level - 1) * 1}rem` }"
-      >
-        <a
-          :href="`#${heading.id}`"
-          @click.prevent="scrollToHeading(heading.id)"
+    <!-- 展开状态显示的目录面板 -->
+    <div v-else class="toc-panel">
+      <div class="toc-header">
+        <span>
+          <i class="fas fa-list-ul"></i>
+          文章目录
+        </span>
+        <button class="close-btn" @click="toggleExpand">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="toc-content">
+        <div
+          v-for="heading in headings"
+          :key="heading.id"
+          class="toc-item"
+          :class="{
+            active: activeId === heading.id,
+            [`level-${heading.level}`]: true
+          }"
+          :style="{ paddingLeft: `${(heading.level - 1) * 1}rem` }"
         >
-          {{ heading.text }}
-        </a>
+          <a
+            :href="`#${heading.id}`"
+            @click.prevent="scrollToHeading(heading.id)"
+          >
+            {{ heading.text }}
+          </a>
+        </div>
       </div>
     </div>
-
-    <!-- 展开/收起按钮（移动端） -->
-    <button class="toc-toggle" @click="toggleToc">
-      <i :class="isExpanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
-    </button>
-  </nav>
+  </div>
 </template>
 
 <script setup>
@@ -45,7 +63,54 @@ const props = defineProps({
 const headings = ref([])
 const activeId = ref('')
 const isExpanded = ref(false)
-const tocContent = ref(null)
+const position = ref({
+  right: '20px',
+  top: '200px'
+})
+
+// 拖动相关状态
+let isDragging = false
+let startX = 0
+let startY = 0
+let startPosX = 0
+let startPosY = 0
+
+// 开始拖动
+const startDrag = (e) => {
+  isDragging = true
+  startX = e.clientX
+  startY = e.clientY
+  startPosX = parseInt(position.value.right)
+  startPosY = parseInt(position.value.top)
+
+  document.addEventListener('mousemove', onDrag)
+  document.addEventListener('mouseup', stopDrag)
+}
+
+// 拖动中
+const onDrag = (e) => {
+  if (!isDragging) return
+  
+  const deltaX = startX - e.clientX
+  const deltaY = e.clientY - startY
+  
+  position.value = {
+    right: `${startPosX + deltaX}px`,
+    top: `${startPosY + deltaY}px`
+  }
+}
+
+// 停止拖动
+const stopDrag = () => {
+  isDragging = false
+  document.removeEventListener('mousemove', onDrag)
+  document.removeEventListener('mouseup', stopDrag)
+}
+
+// 切换展开/收起
+const toggleExpand = () => {
+  isExpanded.value = !isExpanded.value
+}
 
 // 解析文章内容中的标题
 const parseHeadings = () => {
@@ -106,11 +171,6 @@ const observeHeadings = () => {
   }
 }
 
-// 切换目录展开/收起（移动端）
-const toggleToc = () => {
-  isExpanded.value = !isExpanded.value
-}
-
 // 组件挂载时初始化
 onMounted(() => {
   parseHeadings()
@@ -124,35 +184,67 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.table-of-contents {
-  position: sticky;
-  top: calc(var(--header-height) + var(--spacing-lg));
-  max-height: calc(100vh - var(--header-height) - var(--spacing-lg) * 2);
+.toc-container {
+  position: fixed;
+  z-index: 1000;
+  cursor: move;
+}
+
+.toc-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.toc-button:hover {
+  background: var(--primary-dark);
+  transform: scale(1.1);
+}
+
+.toc-panel {
+  width: 280px;
   background: var(--card-bg);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   overflow: hidden;
-  transition: var(--transition);
 }
 
 .toc-header {
   padding: var(--spacing-md);
-  font-weight: 500;
-  color: var(--text-color);
-  border-bottom: 1px solid var(--border-color);
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.toc-header i {
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  background: var(--bg-color);
   color: var(--primary-color);
 }
 
 .toc-content {
-  padding: var(--spacing-md) 0;
+  max-height: 400px;
   overflow-y: auto;
-  max-height: calc(100vh - var(--header-height) - 150px);
+  padding: var(--spacing-md) 0;
 }
 
 .toc-item {
@@ -180,43 +272,5 @@ onMounted(() => {
   color: var(--primary-color);
   background: var(--bg-color);
   font-weight: 500;
-}
-
-.toc-toggle {
-  display: none;
-  width: 100%;
-  padding: var(--spacing-sm);
-  border: none;
-  background: var(--card-bg);
-  color: var(--text-color);
-  cursor: pointer;
-  border-top: 1px solid var(--border-color);
-}
-
-/* 响应式调整 */
-@media (max-width: 768px) {
-  .table-of-contents {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: auto;
-    max-height: 50vh;
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
-    transform: translateY(calc(100% - 40px));
-    z-index: 100;
-  }
-
-  .table-of-contents.expanded {
-    transform: translateY(0);
-  }
-
-  .toc-toggle {
-    display: block;
-  }
-
-  .toc-content {
-    max-height: calc(50vh - 80px);
-  }
 }
 </style>

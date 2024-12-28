@@ -2,18 +2,18 @@
   <div class="app" :data-theme="theme">
     <!-- 遮罩层，用于移动端侧边栏打开时 -->
     <div class="overlay" :class="{ active: isOverlayVisible }" @click="closeAllSidebars"></div>
-    
+
     <!-- 主容器 -->
     <div class="main-container">
       <!-- 顶部导航栏 -->
-      <Header 
-        @toggle-search="toggleSearch" 
-        @toggle-theme="toggleTheme" 
+      <Header
+        @toggle-search="toggleSearch"
+        @toggle-theme="toggleTheme"
       />
 
       <!-- 搜索悬浮框 -->
-      <SearchOverlay 
-        v-if="isSearchOpen" 
+      <SearchOverlay
+        v-if="isSearchOpen"
         @close="closeSearch"
       />
 
@@ -26,7 +26,7 @@
     </div>
 
     <!-- 移动端底部导航 -->
-    <MobileNav 
+    <MobileNav
       @toggle-left="toggleLeftSidebar"
       @toggle-right="toggleRightSidebar"
     />
@@ -51,7 +51,7 @@ const isLeftSidebarOpen = ref(false)
 const isRightSidebarOpen = ref(false)
 
 // 计算遮罩层是否可见
-const isOverlayVisible = computed(() => 
+const isOverlayVisible = computed(() =>
   isLeftSidebarOpen.value || isRightSidebarOpen.value
 )
 
@@ -118,7 +118,7 @@ body {
 
 /* 主容器样式 */
 .main-container {
-  max-width: var(--max-width);
+  max-width: 1650px;
   margin: 0 auto;
   min-height: 100vh;
   background-color: var(--card-bg);

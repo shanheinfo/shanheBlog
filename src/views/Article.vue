@@ -1,147 +1,86 @@
 <template>
   <main class="article-page">
-    <!-- 文章头部信息 -->
-    <header class="article-header">
-      <h1 class="article-title">{{ article.title }}</h1>
-      
-      <div class="article-meta">
-        <div class="meta-left">
-          <span class="meta-item">
-            <i class="fas fa-user"></i>
-            {{ article.author }}
-          </span>
-          <span class="meta-item">
-            <i class="fas fa-calendar"></i>
-            {{ formatDate(article.date) }}
-          </span>
-          <span class="meta-item">
-            <i class="fas fa-folder"></i>
-            <router-link :to="`/category/${article.category}`">
+    <div class="article-main">
+      <!-- 文章头部 -->
+      <header class="article-header">
+        <h1 class="article-title">{{ article.title }}</h1>
+        <div class="article-meta">
+          <div class="meta-left">
+            <span class="meta-item">
+              <i class="fas fa-user"></i>
+              {{ article.author }}
+            </span>
+            <span class="meta-item">
+              <i class="fas fa-calendar"></i>
+              {{ formatDate(article.date) }}
+            </span>
+            <span class="meta-item">
+              <i class="fas fa-folder"></i>
               {{ article.category }}
-            </router-link>
-          </span>
+            </span>
+          </div>
+          <div class="meta-right">
+            <span class="meta-item">
+              <i class="fas fa-eye"></i>
+              {{ formatNumber(article.views) }}
+            </span>
+            <span class="meta-item">
+              <i class="fas fa-comments"></i>
+              {{ formatNumber(article.comments) }}
+            </span>
+          </div>
         </div>
-        
-        <div class="meta-right">
-          <span class="meta-item">
-            <i class="fas fa-eye"></i>
-            {{ formatNumber(article.views) }} 阅读
-          </span>
-          <span class="meta-item">
-            <i class="fas fa-comments"></i>
-            {{ formatNumber(article.comments) }} 评论
-          </span>
-        </div>
-      </div>
+      </header>
+
+      <!-- 文章内容 -->
+      <div class="article-content markdown-body" v-html="article.content"></div>
 
       <!-- 文章标签 -->
       <div class="article-tags">
-        <router-link 
-          v-for="tag in article.tags" 
+        <i class="fas fa-tags"></i>
+        <router-link
+          v-for="tag in article.tags"
           :key="tag"
-          :to="`/tag/${tag}`"
-          class="tag"
+          :to="`/tags/${tag}`"
+          class="tag-link"
         >
-          <i class="fas fa-tag"></i>
           {{ tag }}
         </router-link>
       </div>
-    </header>
 
-    <!-- 文章内容 -->
-    <div class="article-content markdown-body" v-html="article.content"></div>
-
-    <!-- 文章底部 -->
-    <footer class="article-footer">
-      <!-- 版权信息 -->
-      <div class="copyright">
-        <i class="fas fa-copyright"></i>
-        版权声明：本文著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-      </div>
-
-      <!-- 上一篇/下一篇 -->
-      <div class="article-navigation">
-        <router-link 
+      <!-- 文章导航 -->
+      <nav class="article-navigation">
+        <router-link
           v-if="article.prevArticle"
           :to="`/article/${article.prevArticle.id}`"
           class="nav-item prev"
         >
-          <i class="fas fa-chevron-left"></i>
-          <span>{{ article.prevArticle.title }}</span>
+          <i class="fas fa-arrow-left"></i>
+          {{ article.prevArticle.title }}
         </router-link>
-        
         <router-link
           v-if="article.nextArticle"
           :to="`/article/${article.nextArticle.id}`"
           class="nav-item next"
         >
-          <span>{{ article.nextArticle.title }}</span>
-          <i class="fas fa-chevron-right"></i>
+          {{ article.nextArticle.title }}
+          <i class="fas fa-arrow-right"></i>
         </router-link>
-      </div>
-    </footer>
+      </nav>
 
-    <!-- 评论区 -->
-    <section class="comments-section">
-      <h2 class="section-title">
-        <i class="fas fa-comments"></i>
-        评论区
-      </h2>
-      
-      <!-- 评论列表 -->
-      <div class="comments-list">
-        <div v-for="comment in article.comments" :key="comment.id" class="comment-item">
-          <div class="comment-avatar">
-            <img :src="comment.avatar" :alt="comment.author">
-          </div>
-          <div class="comment-content">
-            <div class="comment-header">
-              <span class="comment-author">{{ comment.author }}</span>
-              <span class="comment-date">{{ formatRelativeTime(comment.date) }}</span>
-            </div>
-            <div class="comment-text">{{ comment.content }}</div>
-            <div class="comment-actions">
-              <button class="action-btn" @click="replyToComment(comment)">
-                <i class="fas fa-reply"></i>
-                回复
-              </button>
-              <button class="action-btn" @click="likeComment(comment)">
-                <i class="fas fa-heart"></i>
-                {{ comment.likes }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 评论输入框 -->
-      <div class="comment-form">
-        <textarea 
-          v-model="newComment"
-          placeholder="写下你的评论..."
-          rows="4"
-        ></textarea>
-        <button class="submit-btn" @click="submitComment">
-          发表评论
-        </button>
-      </div>
-    </section>
-
-    <!-- 右侧目录 -->
-    <aside class="article-sidebar">
-      <TableOfContents :content="article.content" />
-    </aside>
+      <!-- 评论区组件 -->
+      <Comments />
+    </div>
+    
+    <TableOfContents :content="article.content" />
   </main>
 </template>
 
 <script setup>
 import TableOfContents from '../components/TableOfContents.vue'
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { formatDate, formatNumber, formatRelativeTime } from '../utils/format'
-
-const route = useRoute()
-const newComment = ref('')
+import Comments from '../components/Comments.vue'
+import { ref } from 'vue'
+import { formatDate, formatNumber } from '../utils/format'
 
 // 模拟文章数据
 const article = ref({
@@ -167,40 +106,23 @@ const article = ref({
     title: 'TypeScript 高级技巧'
   }
 })
-
-// 提交评论
-const submitComment = () => {
-  if (!newComment.value.trim()) return
-  // 这里添加提交评论的逻辑
-  newComment.value = ''
-}
-
-// 回复评论
-const replyToComment = (comment) => {
-  // 这里添加回复评论的逻辑
-}
-
-// 点赞评论
-const likeComment = (comment) => {
-  // 这里添加点赞评论的逻辑
-}
-
-onMounted(() => {
-  // 这里添加获取文章详情的逻辑
-})
 </script>
 
 <style scoped>
 .article-page {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.article-main {
+  width: 100%;
   background: var(--card-bg);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   padding: var(--spacing-xl);
-  max-width: var(--content-width);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: var(--spacing-xl);
+  box-sizing: border-box;
 }
 
 .article-header {
@@ -215,13 +137,12 @@ onMounted(() => {
   margin-bottom: var(--spacing-lg);
 }
 
-/* 复用之前的 meta 和 tags 样式 */
 .article-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-md);
   font-size: 0.9rem;
+  color: var(--text-light);
 }
 
 .meta-left, .meta-right {
@@ -230,52 +151,56 @@ onMounted(() => {
 }
 
 .meta-item {
-  color: var(--text-light);
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.3rem;
 }
 
-/* 文章内容样式 */
 .article-content {
-  line-height: 1.8;
-  color: var(--text-color);
   margin-bottom: var(--spacing-xl);
 }
 
-/* 文章底部样式 */
-.article-footer {
-  border-top: 1px solid var(--border-light);
-  padding-top: var(--spacing-lg);
+.article-tags {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
   margin-bottom: var(--spacing-xl);
-}
-
-.copyright {
   color: var(--text-light);
-  font-size: 0.9rem;
-  margin-bottom: var(--spacing-lg);
-  padding: var(--spacing-md);
+}
+
+.tag-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  padding: var(--spacing-sm) var(--spacing-md);
   background: var(--bg-color);
   border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.tag-link:hover {
+  background: var(--primary-color);
+  color: white;
 }
 
 .article-navigation {
   display: flex;
   justify-content: space-between;
+  margin-bottom: var(--spacing-xl);
   gap: var(--spacing-md);
 }
 
 .nav-item {
   flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   padding: var(--spacing-md);
   background: var(--bg-color);
   border-radius: var(--border-radius);
   color: var(--text-color);
   text-decoration: none;
   transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .nav-item:hover {
@@ -288,114 +213,43 @@ onMounted(() => {
   justify-content: flex-end;
 }
 
-/* 评论区样式 */
-.comments-section {
-  margin-top: var(--spacing-xl);
-}
-
-.section-title {
-  font-size: 1.5rem;
-  margin-bottom: var(--spacing-lg);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.comment-item {
-  display: flex;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
-}
-
-.comment-avatar img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-}
-
-.comment-content {
-  flex: 1;
-}
-
-.comment-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-sm);
-}
-
-.comment-author {
-  font-weight: 500;
-  color: var(--primary-color);
-}
-
-.comment-date {
-  color: var(--text-light);
-  font-size: 0.9rem;
-}
-
-.comment-text {
-  line-height: 1.6;
-  margin-bottom: var(--spacing-sm);
-}
-
-.comment-actions {
-  display: flex;
-  gap: var(--spacing-md);
-}
-
-.action-btn {
-  background: none;
-  border: none;
-  color: var(--text-light);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  transition: var(--transition);
-}
-
-.action-btn:hover {
-  color: var(--primary-color);
-}
-
-.comment-form {
-  margin-top: var(--spacing-xl);
-}
-
-textarea {
-  width: 100%;
-  padding: var(--spacing-md);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  background: var(--bg-color);
-  color: var(--text-color);
-  resize: vertical;
-  margin-bottom: var(--spacing-md);
-}
-
-.submit-btn {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.submit-btn:hover {
-  background: var(--primary-dark);
-}
-
 /* 响应式调整 */
 @media (max-width: 1024px) {
   .article-page {
-    grid-template-columns: 1fr;
+    max-width: 100%;
+    padding: var(--spacing-lg);
   }
 }
 
 @media (max-width: 768px) {
   .article-page {
+    padding: var(--spacing-md);
+  }
+
+  .article-main {
+    padding: var(--spacing-md);
+  }
+
+  .article-title {
+    font-size: 1.5rem;
+  }
+
+  .article-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .article-navigation {
+    flex-direction: column;
+  }
+}
+@media (max-width: 390px) {
+  .article-page {
+    padding: 0;
+  }
+
+  .article-main {
     padding: var(--spacing-md);
   }
 

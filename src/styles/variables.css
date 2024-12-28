@@ -22,7 +22,7 @@
     --max-width: 1200px;
     --header-height: 60px;
     --sidebar-width: 280px;
-    --content-width: calc(var(--max-width) - 2 * var(--sidebar-width) - 4rem);
+    --content-width: min(1200px, calc(100% - var(--spacing-xl) * 2));
     
     /* 间距 */
     --spacing-xs: 0.25rem;
@@ -51,6 +51,11 @@
     --z-index-sidebar: 999;
     --z-index-overlay: 998;
     --z-index-modal: 1001;
+    
+    /* 代码相关 */
+    --code-bg: #1e1e1e;
+    --code-bg-inline: #2d2d2d;
+    --code-color: #d4d4d4;
   }
   
   /* 暗色主题 */
@@ -80,6 +85,7 @@
   @media (max-width: 1024px) {
     :root {
       --sidebar-width: 240px;
+      --content-width: calc(100% - var(--spacing-lg) * 2);
     }
   }
   
@@ -88,5 +94,6 @@
       --header-height: 50px;
       --spacing-lg: 1rem;
       --spacing-xl: 1.5rem;
+      --content-width: calc(100% - var(--spacing-md) * 2);
     }
   }
