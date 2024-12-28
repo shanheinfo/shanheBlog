@@ -71,6 +71,16 @@ const routes = [
     }
   },
   {
+    path: '/about-site',
+    name: 'AboutSite',
+    component: () => import('../views/AboutSite.vue'),
+    meta: {
+      title: '关于网站 - BlueWu的个人博客',
+      description: '关于本站的技术栈、功能特性和更新记录',
+      keywords: '关于网站,技术栈,Vue3,个人博客'
+    }
+  },
+  {
     // 404页面
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
@@ -128,7 +138,7 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
-// 路由后置守卫
+// ���由后置守卫
 router.afterEach(() => {
   // 关闭进度条
   NProgress.done()

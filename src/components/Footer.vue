@@ -22,7 +22,7 @@
 
     <!-- 版权信息 -->
     <div class="footer-section copyright">
-      <p>Copyright © 2020-{{ new Date().getFullYear() }} 蓝色的雾 山河 All Rights Reserved. </p>
+      <p>Copyright © 2020-{{ new Date().getFullYear() }} <a href="https://www.bluewu.cn/" target="_blank">蓝色的雾 </a>山河 All Rights Reserved. </p>
     </div>
   </footer>
 </template>

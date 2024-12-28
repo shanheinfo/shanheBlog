@@ -101,6 +101,11 @@ const menuItems = ref([
     title: '关于我',
     path: '/about',
     icon: 'fas fa-user'
+  },
+  {
+    title: '关于网站',
+    path: '/about-site',
+    icon: 'fa fa-server'
   }
 ])
 

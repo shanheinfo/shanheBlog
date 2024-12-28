@@ -128,9 +128,9 @@ body {
 /* 内容区域布局 */
 .content-container {
   display: grid;
-  grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(--sidebar-width);
-  gap: 2rem;
-  padding: 2rem;
+  grid-template-columns: var(--sidebar-width) 1fr var(--sidebar-width);
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
   min-height: calc(100vh - var(--header-height));
 }
 
@@ -169,6 +169,19 @@ body {
   .sidebar-left.active,
   .sidebar-right.active {
     transform: translateX(0);
+  }
+}
+
+/* 移动端样式调整 */
+@media (max-width: 768px) {
+  .content-container {
+    grid-template-columns: 1fr;
+    /* 添加底部内边距，防止内容被底部导航栏遮挡 */
+    padding-bottom: calc(var(--mobile-nav-height) + var(--spacing-lg));
+  }
+
+  .main-content {
+    margin-bottom: var(--spacing-lg);
   }
 }
 </style>
